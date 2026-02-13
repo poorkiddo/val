@@ -5,75 +5,105 @@
     <title>ДАША НАЖМИ ДА</title>
   </head>
   <body>
-    const phrases = [
-  "Нет",
-  "Точно?",
-  "Даша пажалуста",
-  "А может все-таки да?",
-  "СКАЖИ ДА",
-  "я сейчас умру",
-  "я на коленях",
-  "я сейчас буду биться головой об пол об стол об стены",
-  "не ломай мне ссылку просто нажми да",
-  "ЖМИ ДА",
-];
+    import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-function App() {
-  const [noCount, setNoCount] = useState(0);
-  const [yesPressed, setYesPressed] = useState(false);
-  const yesButtonSize = noCount * 20 + 16;
+public class ValentineApp {
 
-  function handleNoClick() {
-    setNoCount(noCount + 1);
-  }
+    private static int noCount = 0;
+    private static boolean yesPressed = false;
 
-  function getNoButtonText() {
-    return phrases[Math.min(noCount, phrases.length - 1)];
-  }
+    private static final String[] phrases = {
+            "Нет",
+            "Точно?",
+            "Даша пажалуста",
+            "А может все-таки да?",
+            "СКАЖИ ДА",
+            "я сейчас умру",
+            "я на коленях",
+            "я сейчас буду биться головой об пол об стол об стены",
+            "не ломай мне ссылку просто нажми да",
+            "ЖМИ ДА"
+    };
 
-  return (
-    <div className="valentine-container">
-      {yesPressed ? (
-        <>
-          <img
-            alt="image1"
-            src="https://i.pinimg.com/736x/55/7e/f1/557ef18f5596772839288230cec84ae3.jpg"
-          />
-          <div className="text">
-            ХИХИХИХХХ УРАААА <br />
-            (мне не дает поставить сердеччко)
-            <br />
-            ❤️
-            <br /> а вот ура <br />
-            ❤️🫶🫶🫶💜💜💜💜
-            <br />
-            шобы не сливалось с фоном
-          </div>
-        </>
-      ) : (
-        <>
-          <img
-            alt="image2"
-            src="https://i.pinimg.com/736x/70/ba/b0/70bab090f7f10056bd65dfe48daf30e2.jpg"
-          />
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Valentine 💖");
+        frame.setSize(400, 500);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new BorderLayout());
 
-          <div className="a">Will you be my valentine?</div>
-          <div>
-            <button
-              className="yesButton"
-              style={{ fontSize: yesButtonSize }}
-              onClick={() => setYesPressed(true)}
-            >
-              Да
-            </button>
-            <button onClick={handleNoClick} className="noButton">
-              {getNoButtonText()}
-            </button>
-          </div>
-        </>
-      )}
-    </div>
-  );
+        JPanel container = new JPanel();
+        container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+        container.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel imageLabel = new JLabel();
+        JLabel textLabel = new JLabel("", SwingConstants.CENTER);
+
+        JButton yesButton = new JButton("Да");
+        JButton noButton = new JButton(getNoButtonText());
+
+        yesButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        noButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        updateImageAndText(imageLabel, textLabel);
+
+        yesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                yesPressed = true;
+                updateImageAndText(imageLabel, textLabel);
+                container.revalidate();
+                container.repaint();
+            }
+        });
+
+        noButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                noCount++;
+                noButton.setText(getNoButtonText());
+
+                int newSize = noCount * 5 + 14;
+                yesButton.setFont(new Font("Arial", Font.BOLD, newSize));
+            }
+        });
+
+        container.add(Box.createVerticalStrut(20));
+        container.add(imageLabel);
+        container.add(Box.createVerticalStrut(10));
+        container.add(textLabel);
+        container.add(Box.createVerticalStrut(20));
+        container.add(yesButton);
+        container.add(Box.createVerticalStrut(10));
+        container.add(noButton);
+
+        frame.add(container);
+        frame.setVisible(true);
+    }
+
+    private static String getNoButtonText() {
+        return phrases[Math.min(noCount, phrases.length - 1)];
+    }
+
+    private static void updateImageAndText(JLabel imageLabel, JLabel textLabel) {
+        if (yesPressed) {
+            imageLabel.setIcon(new ImageIcon(new ImageIcon(
+                    "https://i.pinimg.com/736x/55/7e/f1/557ef18f5596772839288230cec84ae3.jpg"
+            ).getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH)));
+
+            textLabel.setText("<html><center>ХИХИХИХХХ УРАААА ❤️<br/>" +
+                    "(мне не дает поставить сердеччко)<br/>" +
+                    "❤️🫶🫶🫶💜💜💜💜</center></html>");
+        } else {
+            imageLabel.setIcon(new ImageIcon(new ImageIcon(
+                    "https://i.pinimg.com/736x/70/ba/b0/70bab090f7f10056bd65dfe48daf30e2.jpg"
+            ).getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH)));
+
+            textLabel.setText("Will you be my valentine?");
+        }
+    }
 }
   </body>
 </html>
