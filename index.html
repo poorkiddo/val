@@ -1,109 +1,128 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <link rel="stylesheet" href="style.css">
-    <title>ДАША НАЖМИ ДА</title>
-  </head>
-  <body>
-    import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-public class ValentineApp {
-
-    private static int noCount = 0;
-    private static boolean yesPressed = false;
-
-    private static final String[] phrases = {
-            "Нет",
-            "Точно?",
-            "Даша пажалуста",
-            "А может все-таки да?",
-            "СКАЖИ ДА",
-            "я сейчас умру",
-            "я на коленях",
-            "я сейчас буду биться головой об пол об стол об стены",
-            "не ломай мне ссылку просто нажми да",
-            "ЖМИ ДА"
-    };
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Valentine 💖");
-        frame.setSize(400, 500);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
-
-        JPanel container = new JPanel();
-        container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-        container.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JLabel imageLabel = new JLabel();
-        JLabel textLabel = new JLabel("", SwingConstants.CENTER);
-
-        JButton yesButton = new JButton("Да");
-        JButton noButton = new JButton(getNoButtonText());
-
-        yesButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        noButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        updateImageAndText(imageLabel, textLabel);
-
-        yesButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                yesPressed = true;
-                updateImageAndText(imageLabel, textLabel);
-                container.revalidate();
-                container.repaint();
-            }
-        });
-
-        noButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                noCount++;
-                noButton.setText(getNoButtonText());
-
-                int newSize = noCount * 5 + 14;
-                yesButton.setFont(new Font("Arial", Font.BOLD, newSize));
-            }
-        });
-
-        container.add(Box.createVerticalStrut(20));
-        container.add(imageLabel);
-        container.add(Box.createVerticalStrut(10));
-        container.add(textLabel);
-        container.add(Box.createVerticalStrut(20));
-        container.add(yesButton);
-        container.add(Box.createVerticalStrut(10));
-        container.add(noButton);
-
-        frame.add(container);
-        frame.setVisible(true);
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Valentine 💖</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #ffeef2;
+      text-align: center;
+      padding: 40px;
     }
 
-    private static String getNoButtonText() {
-        return phrases[Math.min(noCount, phrases.length - 1)];
+    .valentine-container img {
+      width: 250px;
+      height: auto;
+      border-radius: 12px;
+      margin-bottom: 15px;
     }
 
-    private static void updateImageAndText(JLabel imageLabel, JLabel textLabel) {
-        if (yesPressed) {
-            imageLabel.setIcon(new ImageIcon(new ImageIcon(
-                    "https://i.pinimg.com/736x/55/7e/f1/557ef18f5596772839288230cec84ae3.jpg"
-            ).getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH)));
-
-            textLabel.setText("<html><center>ХИХИХИХХХ УРАААА ❤️<br/>" +
-                    "(мне не дает поставить сердеччко)<br/>" +
-                    "❤️🫶🫶🫶💜💜💜💜</center></html>");
-        } else {
-            imageLabel.setIcon(new ImageIcon(new ImageIcon(
-                    "https://i.pinimg.com/736x/70/ba/b0/70bab090f7f10056bd65dfe48daf30e2.jpg"
-            ).getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH)));
-
-            textLabel.setText("Will you be my valentine?");
-        }
+    .text {
+      font-size: 18px;
+      margin: 15px 0;
+      line-height: 1.4;
     }
-}
-  </body>
+
+    button {
+      padding: 10px 16px;
+      margin: 8px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .yesButton {
+      background: #ff4d6d;
+      color: white;
+      font-size: 16px;
+    }
+
+    .noButton {
+      background: #ccc;
+    }
+  </style>
+</head>
+<body>
+
+<div class="valentine-container" id="app"></div>
+
+<script>
+  let noCount = 0;
+  let yesPressed = false;
+
+  const phrases = [
+    "Нет",
+    "Точно?",
+    "Даша пажалуста",
+    "А может все-таки да?",
+    "СКАЖИ ДА",
+    "я сейчас умру",
+    "я на коленях",
+    "я сейчас буду биться головой об пол об стол об стены",
+    "не ломай мне ссылку просто нажми да",
+    "ЖМИ ДА"
+  ];
+
+  const app = document.getElementById("app");
+
+  function getNoButtonText() {
+    return phrases[Math.min(noCount, phrases.length - 1)];
+  }
+
+  function render() {
+    app.innerHTML = "";
+
+    if (yesPressed) {
+      app.innerHTML = `
+        <img src="https://i.pinimg.com/736x/55/7e/f1/557ef18f5596772839288230cec84ae3.jpg">
+        <div class="text">
+          ХИХИХИХХХ УРАААА ❤️ <br>
+          (мне не дает поставить сердеччко) <br>
+          ❤️🫶🫶🫶💜💜💜💜
+        </div>
+      `;
+    } else {
+      const yesButtonSize = noCount * 20 + 16;
+
+      const container = document.createElement("div");
+
+      const img = document.createElement("img");
+      img.src = "https://i.pinimg.com/736x/70/ba/b0/70bab090f7f10056bd65dfe48daf30e2.jpg";
+
+      const question = document.createElement("div");
+      question.className = "text";
+      question.innerText = "Will you be my valentine?";
+
+      const yesBtn = document.createElement("button");
+      yesBtn.className = "yesButton";
+      yesBtn.style.fontSize = yesButtonSize + "px";
+      yesBtn.innerText = "Да";
+      yesBtn.onclick = () => {
+        yesPressed = true;
+        render();
+      };
+
+      const noBtn = document.createElement("button");
+      noBtn.className = "noButton";
+      noBtn.innerText = getNoButtonText();
+      noBtn.onclick = () => {
+        noCount++;
+        render();
+      };
+
+      container.appendChild(img);
+      container.appendChild(question);
+      container.appendChild(yesBtn);
+      container.appendChild(noBtn);
+
+      app.appendChild(container);
+    }
+  }
+
+  render();
+</script>
+
+</body>
 </html>
