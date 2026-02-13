@@ -5,5 +5,75 @@
     <title>ДАША НАЖМИ ДА</title>
   </head>
   <body>
+    const phrases = [
+  "Нет",
+  "Точно?",
+  "Даша пажалуста",
+  "А может все-таки да?",
+  "СКАЖИ ДА",
+  "я сейчас умру",
+  "я на коленях",
+  "я сейчас буду биться головой об пол об стол об стены",
+  "не ломай мне ссылку просто нажми да",
+  "ЖМИ ДА",
+];
+
+function App() {
+  const [noCount, setNoCount] = useState(0);
+  const [yesPressed, setYesPressed] = useState(false);
+  const yesButtonSize = noCount * 20 + 16;
+
+  function handleNoClick() {
+    setNoCount(noCount + 1);
+  }
+
+  function getNoButtonText() {
+    return phrases[Math.min(noCount, phrases.length - 1)];
+  }
+
+  return (
+    <div className="valentine-container">
+      {yesPressed ? (
+        <>
+          <img
+            alt="image1"
+            src="https://i.pinimg.com/736x/55/7e/f1/557ef18f5596772839288230cec84ae3.jpg"
+          />
+          <div className="text">
+            ХИХИХИХХХ УРАААА <br />
+            (мне не дает поставить сердеччко)
+            <br />
+            ❤️
+            <br /> а вот ура <br />
+            ❤️🫶🫶🫶💜💜💜💜
+            <br />
+            шобы не сливалось с фоном
+          </div>
+        </>
+      ) : (
+        <>
+          <img
+            alt="image2"
+            src="https://i.pinimg.com/736x/70/ba/b0/70bab090f7f10056bd65dfe48daf30e2.jpg"
+          />
+
+          <div className="a">Will you be my valentine?</div>
+          <div>
+            <button
+              className="yesButton"
+              style={{ fontSize: yesButtonSize }}
+              onClick={() => setYesPressed(true)}
+            >
+              Да
+            </button>
+            <button onClick={handleNoClick} className="noButton">
+              {getNoButtonText()}
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
   </body>
 </html>
